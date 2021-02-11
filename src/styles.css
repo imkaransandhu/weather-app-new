@@ -1,0 +1,49 @@
+/* Header Section */
+.header {
+  text-align: center;
+  margin-bottom: 5%;
+}
+
+.city-name {
+  font-weight: normal;
+}
+
+.city-temperature {
+  font-size: 5rem;
+}
+
+.city-name,
+.city-temperature,
+.city-weather-type,
+.city-temperature {
+  margin: 0;
+  padding: 0;
+}
+
+/* text-center */
+.hourly,
+.daily {
+  text-align: center;
+}
+
+/* border section */
+.hourly,
+.daily,
+.today-description,
+.current-data {
+  border-top: 1px solid black;
+  padding: 1%;
+}
+
+
+
+
+/* current section */
+.current-data,
+.current-row {
+  border-bottom: 1px solid black;
+}
+
+p {
+  margin: 0;
+}
