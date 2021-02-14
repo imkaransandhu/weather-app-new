@@ -49,7 +49,7 @@ export default function DAILY(props) {
 
       {props.detail.daily.map((day,index) => {
         return (
-          <div className="row">
+          <div key={index} className="row">
           <div className="col-3">
             <p> {changeToDay(props.detail.daily[index].dt)} </p>
           </div>

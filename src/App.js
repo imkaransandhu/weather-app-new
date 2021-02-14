@@ -4,48 +4,194 @@ import HOURLY from "./components/hourly-components/HOURLY";
 import DAILY from "./components/daily-components/DAILY";
 import TODAYDESCRIPTION from "./components/todaydescription/TODAY";
 import CURRENTDATA from "./components/currentData/CURRENTDATA";
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
+import clear from "./images/clear.jpg";
+import cloud from "./images/clouds.jpg";
+import thunderstorm from "./images/thunderstorm.jpg";
+import drizzle from "./images/drizzle.jpg";
+import rain from "./images/rain.jpg";
+import snow from "./images/snow.jpg";
+import mist from "./images/mist.jpg";
+import smoke from "./images/smoke.jpg";
+import haze from "./images/haze.jpg";
+import dust from "./images/dust.jpg";
+import fog from "./images/fog.jpg";
+import sand from "./images/sand.jpg";
+import ash from "./images/ash.jpg";
+// import squall from "./images/squall.jpg";
+import tornado from "./images/Tornado.jpg";
+import { PassiveListener } from 'react-event-injector';
+
+
+
 
 
 
 function App() {
   const [weatherData, setWeatherData] = React.useState([]);
   const [input, setInput] = React.useState("");
-  const [cityName, setCityName] = React.useState("Auckland");
-  const [cityGeo, setCityGeo] = React.useState({ lat: -36.848461, lng: 174.76333 });
+  const [cityName, setCityName] = React.useState("");
+  const [cityGeo, setCityGeo] = React.useState({ lat: "", lon: "" });
+  const widthOfDevice = useMediaQuery();
 
-  console.log(cityName, cityGeo);
+  function useMediaQuery() {
+    const [screenSize, setScreenSize] = React.useState([0, 0]);
+
+    useLayoutEffect(() => {
+      function updateScreenSize() {
+        setScreenSize([window.innerWidth, window.innerHeight]);
+      }
+      window.addEventListener("resize", updateScreenSize);
+      updateScreenSize();
+      return () => window.removeEventListener("resize", updateScreenSize);
+    }, []);
+
+    return screenSize;
+  }
+
+  function changeBackground(givendata) {
+
+    const body = document.body;
+    body.style.color = "white";
+    body.style.backgroundSize = "cover";
+
+    switch (givendata) {
+      case "Cloud":
+        body.style.backgroundImage = "url(" + cloud + ")";
+        break;
+      case "Clear":
+        body.style.backgroundImage = "url(" + clear + ")";
+        break;
+      case "Thunderstorm":
+        body.style.backgroundImage = "url(" + thunderstorm + ")";
+        break;
+      case "Drizzle":
+        body.style.backgroundImage = "url(" + drizzle + ")";
+        break;
+      case "Rain":
+        body.style.backgroundImage = "url(" + rain + ")";
+        break;
+      case "Snow":
+        body.style.backgroundImage = "url(" + snow + ")";
+        break;
+      case "Mist":
+        body.style.backgroundImage = "url(" + mist + ")";
+        break;
+      case "Smoke":
+        body.style.backgroundImage = "url(" + smoke + ")";
+        break;
+      case "Haze":
+        body.style.backgroundImage = "url(" + haze + ")";
+        break;
+      case "Dust":
+        body.style.backgroundImage = "url(" + dust + ")";
+        break;
+      case "Fog":
+        body.style.backgroundImage = "url(" + fog + ")";
+        break;
+      case "Sand":
+        body.style.backgroundImage = "url(" + sand + ")";
+        break;
+      case "Ash":
+        body.style.backgroundImage = "url(" + ash + ")";
+        break;
+      case "Squall":
+        body.style.backgroundImage = "url(" + clear + ")";
+        break;
+      case "Tornado":
+        body.style.backgroundImage = "url(" + tornado + ")";
+        break;
+      default:
+        body.style.backgroundImage = "url(" + fog + ")";
+    }
+  }
+
 
   function handleChange(event) {
     setInput(event.target.value);
   }
 
-  function handleClick(event) {
+  function handleClick() {
+
     setCityName(input);
+
   }
+
+
+
+
+
+
+
+
 
   useEffect(() => {
 
-    async function fetchData() {
+
+    if (cityName === "") {
+     
+      function getLocation() {
+
+        navigator.geolocation.getCurrentPosition(showPosition);
 
 
-      const cityUrl = "https://api.opencagedata.com/geocode/v1/json?q=" + cityName + "&key=da1e71d2826549a8ae982ae3dcb375a2";
-      const res = await fetch(cityUrl);
-      const cityData = await res.json();
-      console.log(cityData);
-      setCityGeo({ lat: cityData.results[0].geometry.lat, lng: cityData.results[0].geometry.lng });
+      }
+      window.onload = getLocation();
+      function showPosition(position) {
+        setCityGeo({ lat: position.coords.latitude, lon: position.coords.longitude });
+        console.log("dds");
+      }
 
-      const url =
-        "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityGeo.lat + "&lon=" + cityGeo.lng + "&appid=590618c9d39064eb005bc3b95c9ea141&units=metric";
-      const response = await fetch(url);
-      const data = await response.json();
-      const item = [data];
-      setWeatherData(item);
+      async function fetchData() {
+
+        let url;
+        console.log(cityName);
+        url =
+          "https://us1.locationiq.com/v1/reverse.php?lat=" + cityGeo.lat + "&lon=" + cityGeo.lon + "&key=pk.767b1c56367418618db6600036880cfc&format=json";
+        let response = await fetch(url);
+        let data = await response.json();
+        let item = [data];
+        setCityName(item[0].address.county);
+        setCityGeo({ lat: item[0].lat, lon: item[0].lon });
+      }
+
+      fetchData();
+    } else {
+      async function fetchData() {
+
+        let cityUrl, url;
+
+        console.log(cityName);
+        cityUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=8e1b05f5f1637347ee4f67f18042f8ee";
+
+        let res = await fetch(cityUrl);
+        let cityData = await res.json();
+        setCityGeo({ lat: cityData.coord.lat, lon: cityData.coord.lon });
+
+
+        url =
+          "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityGeo.lat + "&lon=" + cityGeo.lon + "&appid=8e1b05f5f1637347ee4f67f18042f8ee&units=metric";
+        let response = await fetch(url);
+        let data = await response.json();
+        let item = [data];
+        setWeatherData(item);
+        console.log(cityUrl);
+        item && changeBackground(item[0].current.weather[0].main);
+        //changeBackground(item.current.uvi);
+
+      }
+
+      fetchData();
     }
 
-    fetchData();
 
-  }, [cityGeo.lat, cityGeo.lng, cityName, input]);
+
+  }, [cityGeo.lat, cityGeo.lon, cityName]);
+
+
+
+
+
 
 
 
@@ -62,19 +208,25 @@ function App() {
 
 
 
-        <div className="container m-2 text-center">
+      <div className="container change-city">
         <div className="row">
           <div className="col-6">
-            <input type="text" className="form-control" onChange={handleChange} placeholder={input}  />
+            <PassiveListener onChange={handleChange}>
+              <input type="text" className="form-control" placeholder="Enter City" />
+            </PassiveListener>
+
           </div>
-          <div className="col-6">
-          <button onClick={useEffect && handleClick} className="btn btn-secondary">Go</button>
+          <div className="col-4">
+            <PassiveListener onClick={handleClick}>
+              <button className="btn btn-outline-secondary">Go</button>
+            </PassiveListener>
+
           </div>
         </div>
-        </div>
+      </div>
 
 
-      
+
 
 
     </div>

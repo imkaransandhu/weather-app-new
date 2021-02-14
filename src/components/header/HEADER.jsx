@@ -5,7 +5,7 @@ export default function HEADER(props) {
     <section className="header">
       <div className="container">
         <h1 className="city-name">{props.name}</h1>
-        <p className="city-weather-type">{props.detail.current.weather[0].description}</p>
+        <p className="city-weather-type">{props.detail.current.weather[0].main}</p>
         <h2 className="city-temperature">{props.detail.current.temp}° </h2>
         <p>
           {" "}

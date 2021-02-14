@@ -34,11 +34,11 @@ export default function HOURLY(props) {
 
               return (
 
-                <div className="col-2">
+                <div key={index} className="col-2">
 
-                  <p>{time(props.detail.hourly[index].dt)}</p>
-                  <img src={showImage(props.detail.hourly[index].weather[0].icon)} alt="hourly-icon" />
-                  <p> {props.detail.hourly[index].temp}°</p>
+                  <p className="hourly-text">{time(props.detail.hourly[index].dt)}</p>
+                  <img className="hourly-image" src={showImage(props.detail.hourly[index].weather[0].icon)} alt="hourly-icon" />
+                  <p className="hourly-text"> {props.detail.hourly[index].temp}°</p>
                 </div>
 
               )

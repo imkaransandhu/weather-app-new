@@ -31,7 +31,8 @@
 .daily,
 .today-description,
 .current-data {
-  border-top: 1px solid black;
+  border-top: 1px solid white;
+  
   padding: 1%;
 }
 
@@ -41,9 +42,47 @@
 /* current section */
 .current-data,
 .current-row {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid white;
 }
 
 p {
   margin: 0;
+}
+
+
+.hourly-image {
+  width: 30px !important;
+}
+
+.big-text {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+
+.change-city {
+  padding: 5%;
+}
+
+.change-city .form-control {
+  background: transparent;
+  color: white;
+}
+
+.change-city button {
+  border-color: #fff;
+  color: #fff;
+}
+
+@media only screen and (max-width: 800px) {
+  .hourly-text {
+    font-size: .8rem;
+  
+  }
+
+  .big-text {
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+
 }
