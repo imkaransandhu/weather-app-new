@@ -30,8 +30,8 @@ import { PassiveListener } from 'react-event-injector';
 function App() {
   const [weatherData, setWeatherData] = React.useState([]);
   const [input, setInput] = React.useState("");
-  const [cityName, setCityName] = React.useState("");
-  const [cityGeo, setCityGeo] = React.useState({ lat: "", lon: "" });
+  const [cityName, setCityName] = React.useState("Auckland");
+  const [cityGeo, setCityGeo] = React.useState({ lat: -37.0311168, lon: 174.9188608 });
   const widthOfDevice = useMediaQuery();
 
   function useMediaQuery() {
@@ -119,73 +119,40 @@ function App() {
 
 
 
+  
 
 
-
-
+      
+  
 
 
   useEffect(() => {
 
+    async function fetchData() {
 
-    if (cityName === "") {
-     
-      function getLocation() {
+      let cityUrl, url;
+      
+      console.log(cityName);
+      cityUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=8e1b05f5f1637347ee4f67f18042f8ee";
 
-        navigator.geolocation.getCurrentPosition(showPosition);
-
-
-      }
-      window.onload = getLocation();
-      function showPosition(position) {
-        setCityGeo({ lat: position.coords.latitude, lon: position.coords.longitude });
-        console.log("dds");
-      }
-
-      async function fetchData() {
-
-        let url;
-        console.log(cityName);
-        url =
-          "https://us1.locationiq.com/v1/reverse.php?lat=" + cityGeo.lat + "&lon=" + cityGeo.lon + "&key=pk.767b1c56367418618db6600036880cfc&format=json";
-        let response = await fetch(url);
-        let data = await response.json();
-        let item = [data];
-        setCityName(item[0].address.county);
-        setCityGeo({ lat: item[0].lat, lon: item[0].lon });
-      }
-
-      fetchData();
-    } else {
-      async function fetchData() {
-
-        let cityUrl, url;
-
-        console.log(cityName);
-        cityUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=8e1b05f5f1637347ee4f67f18042f8ee";
-
-        let res = await fetch(cityUrl);
-        let cityData = await res.json();
-        setCityGeo({ lat: cityData.coord.lat, lon: cityData.coord.lon });
+      let res = await fetch(cityUrl);
+      let cityData = await res.json();
+      setCityGeo({ lat: cityData.coord.lat, lon: cityData.coord.lon });
 
 
-        url =
-          "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityGeo.lat + "&lon=" + cityGeo.lon + "&appid=8e1b05f5f1637347ee4f67f18042f8ee&units=metric";
-        let response = await fetch(url);
-        let data = await response.json();
-        let item = [data];
-        setWeatherData(item);
-        console.log(cityUrl);
-        item && changeBackground(item[0].current.weather[0].main);
-        //changeBackground(item.current.uvi);
+      url =
+        "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityGeo.lat + "&lon=" + cityGeo.lon + "&appid=8e1b05f5f1637347ee4f67f18042f8ee&units=metric";
+      let response = await fetch(url);
+      let data = await response.json();
+      let item = [data];
+      setWeatherData(item);
+      console.log(cityUrl);
+      item && changeBackground(item[0].current.weather[0].main);
+      //changeBackground(item.current.uvi);
 
-      }
-
-      fetchData();
     }
 
-
-
+    fetchData();
   }, [cityGeo.lat, cityGeo.lon, cityName]);
 
 
@@ -211,14 +178,14 @@ function App() {
       <div className="container change-city">
         <div className="row">
           <div className="col-6">
-            <PassiveListener onChange={handleChange}>
+            <PassiveListener  onChange={handleChange}>
               <input type="text" className="form-control" placeholder="Enter City" />
             </PassiveListener>
 
           </div>
           <div className="col-4">
             <PassiveListener onClick={handleClick}>
-              <button className="btn btn-outline-secondary">Go</button>
+              <button  className="btn btn-outline-secondary">Go</button>
             </PassiveListener>
 
           </div>
